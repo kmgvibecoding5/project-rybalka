@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>«Рыбка» — рыболовный магазин</title>
+<meta name="description" content="Рыболовный магазин: удочки, надувные лодки, моторы, одежда для рыбалки, снасти и прикормки.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b2a2e;
+    --bg-2: #0f363b;
+    --surface: #134148;
+    --surface-2: #18505a;
+    --line: #23606a;
+    --text: #eaf4f2;
+    --muted: #a9c6c3;
+    --accent: #ff8a2a;
+    --accent-ink: #1a0f05;
+    --accent-soft: rgba(255, 138, 42, .14);
+    --ok: #6fd3a8;
+    --radius: 16px;
+    --shadow: 0 18px 40px rgba(0, 0, 0, .35);
+    --head: "Unbounded", system-ui, sans-serif;
+    --body: "Onest", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.55 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: var(--accent); }
+  h1, h2, h3 { font-family: var(--head); line-height: 1.15; margin: 0; }
+  .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 0 22px; border-radius: 999px;
+    font: 600 15px/1 var(--body); text-decoration: none; cursor: pointer;
+    border: 2px solid transparent; transition: transform .15s, background .15s, border-color .15s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: #ff9d4d; }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+  .btn-ghost:hover { border-color: var(--accent); }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .ph { color: var(--accent); font-weight: 600; }
+
+  /* Header */
+  header.top {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(11, 42, 46, .9); backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: flex; align-items: center; gap: 20px; min-height: 68px; }
+  .logo { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font: 700 15px var(--head); }
+  .logo svg { width: 34px; height: 34px; }
+  nav.menu { display: flex; gap: 4px; margin-left: auto; }
+  nav.menu a {
+    color: var(--muted); text-decoration: none; padding: 0 14px; min-height: 44px;
+    display: inline-flex; align-items: center; border-radius: 10px; font-weight: 500;
+  }
+  nav.menu a:hover { color: var(--text); background: var(--surface); }
+  .cart {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px;
+    border-radius: 999px; background: var(--surface); color: var(--text); border: 1px solid var(--line);
+    font: 600 14px var(--body);
+  }
+  .cart b {
+    min-width: 24px; height: 24px; border-radius: 12px; background: var(--accent); color: var(--accent-ink);
+    display: inline-grid; place-items: center; font-size: 13px; padding: 0 6px;
+  }
+  .cart.bump b { animation: bump .35s; }
+  @keyframes bump { 50% { transform: scale(1.35); } }
+
+  /* Hero */
+  .hero { position: relative; overflow: hidden; padding: 56px 0 72px;
+    background: radial-gradient(900px 500px at 85% 20%, #175a62 0%, transparent 60%), var(--bg); }
+  .hero .wrap { display: grid; grid-template-columns: 1.05fr 1fr; gap: 40px; align-items: center; }
+  .eyebrow { display: inline-block; font: 600 13px var(--body); letter-spacing: .08em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-soft); padding: 7px 12px; border-radius: 999px; margin-bottom: 18px; }
+  .hero h1 { font-size: clamp(30px, 4.6vw, 54px); font-weight: 800; letter-spacing: -.01em; }
+  .hero h1 span { color: var(--accent); }
+  .hero p.lead { color: var(--muted); font-size: 18px; max-width: 520px; margin: 18px 0 28px; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 36px; }
+  .stats div { font-size: 14px; color: var(--muted); }
+  .stats strong { display: block; font: 700 22px var(--head); color: var(--text); }
+  figure.art { margin: 0; }
+  .art-frame { background: linear-gradient(180deg, #1d6670 0%, #0f3e44 100%); border-radius: 28px; border: 1px solid var(--line);
+    box-shadow: var(--shadow); overflow: hidden; }
+  figure.art figcaption {
+    margin-top: 16px; text-align: center; font: 700 clamp(16px, 2vw, 21px)/1.3 var(--head); color: var(--text);
+  }
+  figure.art figcaption::before, figure.art figcaption::after { content: "«"; color: var(--accent); }
+  figure.art figcaption::after { content: "»"; }
+
+  /* Sections */
+  section.block { padding: 72px 0; }
+  .sec-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+  .sec-head h2 { font-size: clamp(24px, 3vw, 36px); }
+  .sec-head p { color: var(--muted); margin: 8px 0 0; max-width: 560px; }
+
+  /* Categories tiles */
+  .cats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 28px; }
+  .cat-tile {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px; min-height: 120px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    color: var(--text); cursor: pointer; text-align: left; font: 600 15px/1.25 var(--body); transition: border-color .15s, background .15s;
+  }
+  .cat-tile:hover { border-color: var(--accent); }
+  .cat-tile[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+  .cat-tile svg { width: 34px; height: 34px; color: var(--accent); }
+  .cat-tile small { color: var(--muted); font-weight: 500; font-size: 13px; }
+
+  .filters { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; padding: 16px 18px;
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 24px; }
+  .filters .group { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .filters .label { color: var(--muted); font-size: 14px; margin-right: 4px; }
+  .chip {
+    min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent;
+    color: var(--text); font: 500 14px var(--body); cursor: pointer;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  .count { margin-left: auto; color: var(--muted); font-size: 14px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .card {
+    display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); overflow: hidden; transition: transform .15s, border-color .15s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: #2f7a85; }
+  .card .thumb { height: 150px; display: grid; place-items: center; background: linear-gradient(160deg, var(--surface-2), #0e383e); }
+  .card .thumb svg { width: 86px; height: 86px; color: var(--accent); opacity: .9; }
+  .card .body { padding: 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; background: var(--bg-2); color: var(--muted); }
+  .tag.imp { color: #9fd0ff; background: rgba(110, 170, 255, .12); }
+  .tag.dom { color: var(--ok); background: rgba(111, 211, 168, .12); }
+  .card h3 { font: 600 17px/1.3 var(--body); }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; flex: 1; }
+  .card .foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 6px; }
+  .price { font: 700 16px var(--head); color: var(--accent); }
+  .add { min-height: 44px; padding: 0 16px; font-size: 14px; }
+  .add.done { background: var(--ok); }
+  .empty { display: none; text-align: center; padding: 48px 20px; border: 1px dashed var(--line); border-radius: var(--radius); color: var(--muted); }
+  .empty.show { display: block; }
+
+  /* Benefits */
+  .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .benefit { padding: 26px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .benefit .ico { width: 52px; height: 52px; border-radius: 14px; background: var(--accent-soft); display: grid; place-items: center; margin-bottom: 16px; }
+  .benefit .ico svg { width: 28px; height: 28px; color: var(--accent); }
+  .benefit h3 { font-size: 18px; margin-bottom: 8px; }
+  .benefit p { color: var(--muted); margin: 0; }
+
+  /* Contacts */
+  .contacts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .panel { padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .panel h3 { font-size: 20px; margin-bottom: 18px; }
+  dl.info { margin: 0; display: grid; gap: 14px; }
+  dl.info div { display: grid; grid-template-columns: 130px 1fr; gap: 10px; }
+  dl.info dt { color: var(--muted); }
+  dl.info dd { margin: 0; font-weight: 500; }
+  form.callback { display: grid; gap: 14px; }
+  form.callback label { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+  form.callback input {
+    min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--bg-2); color: var(--text); font: 16px var(--body);
+  }
+  form.callback input:focus { border-color: var(--accent); outline: none; }
+  .form-note { font-size: 13px; color: var(--muted); margin: 0; }
+  .form-ok { display: none; padding: 14px; border-radius: 12px; background: rgba(111, 211, 168, .12); color: var(--ok); font-weight: 600; }
+  .form-ok.show { display: block; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 100px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+  /* Chat */
+  .chat-toggle {
+    position: fixed; right: 20px; bottom: 20px; z-index: 50; min-height: 56px; padding: 0 22px 0 18px;
+    border-radius: 999px; border: 0; background: var(--accent); color: var(--accent-ink);
+    font: 700 15px var(--body); display: inline-flex; align-items: center; gap: 10px; cursor: pointer; box-shadow: var(--shadow);
+  }
+  .chat-toggle svg { width: 24px; height: 24px; }
+  .chat {
+    position: fixed; right: 20px; bottom: 90px; z-index: 50; width: min(380px, calc(100vw - 32px));
+    height: min(560px, calc(100vh - 120px)); display: none; flex-direction: column;
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden;
+  }
+  .chat.open { display: flex; animation: pop .2s ease-out; }
+  @keyframes pop { from { opacity: 0; transform: translateY(10px); } }
+  .chat-head { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 16px; background: var(--surface); border-bottom: 1px solid var(--line); }
+  .chat-head .av { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); display: grid; place-items: center; color: var(--accent-ink); }
+  .chat-head .av svg { width: 22px; height: 22px; }
+  .chat-head strong { display: block; font-size: 15px; }
+  .chat-head small { color: var(--ok); font-size: 12px; }
+  .chat-head .x { margin-left: auto; width: 44px; height: 44px; border-radius: 12px; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 22px; }
+  .chat-head .x:hover { background: var(--bg-2); color: var(--text); }
+  .chat-log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 86%; padding: 10px 14px; border-radius: 16px; font-size: 15px; line-height: 1.45; }
+  .msg.bot { background: var(--surface); border-bottom-left-radius: 4px; align-self: flex-start; }
+  .msg.me { background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 4px; align-self: flex-end; font-weight: 500; }
+  .quick { display: flex; flex-wrap: wrap; gap: 8px; align-self: stretch; }
+  .quick button {
+    min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--accent); background: transparent;
+    color: var(--text); font: 500 14px var(--body); cursor: pointer;
+  }
+  .quick button:hover { background: var(--accent-soft); }
+  .quick button.home { border-color: var(--line); color: var(--muted); }
+  .chat-input { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); background: var(--surface); }
+  .chat-input input {
+    flex: 1; min-width: 0; min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--bg-2); color: var(--text); font: 15px var(--body);
+  }
+  .chat-input input:focus { border-color: var(--accent); outline: none; }
+  .chat-input button { width: 44px; height: 44px; border-radius: 12px; border: 0; background: var(--accent); color: var(--accent-ink); cursor: pointer; display: grid; place-items: center; }
+  .chat-input button svg { width: 20px; height: 20px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Responsive */
+  @media (max-width: 980px) {
+    .hero .wrap { grid-template-columns: 1fr; }
+    .cats { grid-template-columns: repeat(3, 1fr); }
+    nav.menu { display: none; }
+    .cart { margin-left: auto; }
+  }
+  @media (max-width: 720px) {
+    .benefits, .contacts { grid-template-columns: 1fr; }
+    .cats { grid-template-columns: repeat(2, 1fr); }
+    section.block { padding: 52px 0; }
+    .hero { padding: 36px 0 52px; }
+    .count { margin-left: 0; width: 100%; }
+    dl.info div { grid-template-columns: 1fr; gap: 2px; }
+    .chat-toggle span { display: none; }
+    .chat-toggle { padding: 0 16px; }
+    .chat { right: 16px; bottom: 86px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG-иконки -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-rod" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 42 40 6"/><path d="M40 6c4 10 4 22 0 32"/><circle cx="40" cy="40" r="2.5"/><circle cx="13" cy="35" r="4"/><path d="M13 35h-5"/>
+    </symbol>
+    <symbol id="i-boat" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 26h40c-2 7-7 11-14 11H16C9 37 5 33 4 26Z"/><path d="M10 26c0-3 2-5 5-5h18c3 0 5 2 5 5"/><path d="M3 42c4 0 4-2 8-2s4 2 8 2 4-2 8-2 4 2 8-2 4 2 8 2"/>
+    </symbol>
+    <symbol id="i-motor" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="14" y="4" width="20" height="14" rx="4"/><path d="M20 18v18h8V18"/><path d="M18 36h12l-2 6h-8z"/><path d="M34 10h6"/><path d="M24 24h10"/>
+    </symbol>
+    <symbol id="i-jacket" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 5 8 10 4 24l6 2v17h28V26l6-2-4-14-9-5"/><path d="M17 5c1 4 4 6 7 6s6-2 7-6"/><path d="M24 11v32"/><path d="M14 30h5M29 30h5"/>
+    </symbol>
+    <symbol id="i-hook" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="28" cy="6" r="3"/><path d="M28 9v22a9 9 0 0 1-18 0v-4l5 4"/><path d="M36 20l6 6-6 6M42 26h-8"/>
+    </symbol>
+    <symbol id="i-bait" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 14h28l-3 28H13z"/><path d="M8 14h32"/><path d="M16 8h16l2 6H14z"/><circle cx="20" cy="26" r="2"/><circle cx="28" cy="31" r="2"/><circle cx="22" cy="35" r="1.5"/>
+    </symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.2-4.4A8 8 0 1 1 21 12Z"/>
+    </symbol>
+    <symbol id="i-fish" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 24c6-9 16-12 26-8 4 2 7 5 8 8-1 3-4 6-8 8-10 4-20 1-26-8Z"/><path d="M38 24l7-7v14z"/><circle cx="12" cy="22" r="1.6" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-map" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M24 44s14-12 14-24a14 14 0 0 0-28 0c0 12 14 24 14 24Z"/><path d="M17 20c2-3 5-3 7 0s5 3 7 0"/>
+    </symbol>
+    <symbol id="i-truck" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 10h26v24H3z"/><path d="M29 18h9l7 8v8H29"/><circle cx="12" cy="36" r="4"/><circle cx="36" cy="36" r="4"/>
+    </symbol>
+    <symbol id="i-swap" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 16h30l-7-7"/><path d="M40 32H10l7 7"/>
+    </symbol>
+    <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="На главную">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#ff8a2a"/><use href="#i-fish" x="6" y="6" width="36" height="36" style="color:#1a0f05"/></svg>
+      <span>«Рыбка»</span>
+    </a>
+    <nav class="menu" aria-label="Основное меню">
+      <a href="#catalog">Каталог</a>
+      <a href="#benefits">Преимущества</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="cart" id="cart" role="status" aria-live="polite">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6"/><circle cx="10" cy="20.5" r="1.3"/><circle cx="17" cy="20.5" r="1.3"/></svg>
+      Корзина <b id="cartCount">0</b>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <!-- Главный экран (F-1…F-3) -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Рыболовный магазин · Астана</span>
+        <h1>Всё для рыбалки — <span>от удочки до лодки с мотором</span></h1>
+        <p class="lead">Импортные и отечественные удочки, надувные лодки, моторы, сезонная одежда, снасти и прикормки. Поможем подобрать снаряжение под ваш водоём.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#catalog">Перейти в каталог</a>
+          <button class="btn btn-ghost" type="button" data-open-chat>Задать вопрос</button>
+        </div>
+        <div class="stats">
+          <div><strong>6</strong>разделов каталога</div>
+          <div><strong>4</strong>сезона одежды</div>
+          <div><strong>РФ + импорт</strong>производители</div>
+        </div>
+      </div>
+
+      <figure class="art">
+        <div class="art-frame">
+          <svg viewBox="0 0 560 440" role="img" aria-label="Рыбак в шляпе держит в руках огромного судака на фоне озера">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#ffb26b"/><stop offset=".55" stop-color="#f27f4a"/><stop offset="1" stop-color="#2a6a72"/>
+              </linearGradient>
+              <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1f6b73"/><stop offset="1" stop-color="#0c3539"/>
+              </linearGradient>
+              <linearGradient id="zander" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#6f7f5a"/><stop offset=".55" stop-color="#b7bf98"/><stop offset="1" stop-color="#eef0dc"/>
+              </linearGradient>
+            </defs>
+            <rect width="560" height="440" fill="url(#sky)"/>
+            <circle cx="420" cy="170" r="56" fill="#ffd9a3" opacity=".9"/>
+            <!-- холмы и лес -->
+            <path d="M0 250 70 205l60 30 70-50 80 45 70-35 90 40 60-25 60 30v40H0z" fill="#1e5158"/>
+            <g fill="#143d43">
+              <path d="M30 262l14-40 14 40z"/><path d="M60 262l18-52 18 52z"/><path d="M470 262l16-46 16 46z"/><path d="M505 262l14-38 14 38z"/>
+            </g>
+            <rect y="258" width="560" height="182" fill="url(#water)"/>
+            <g stroke="#7fc0c4" stroke-width="3" stroke-linecap="round" opacity=".35">
+              <path d="M30 300h60M380 290h90M120 340h50M440 360h70M20 400h80"/>
+            </g>
+            <!-- удочка -->
+            <path d="M120 420 470 60" stroke="#2a1a10" stroke-width="5" stroke-linecap="round"/>
+            <path d="M470 60c10 40 6 90-6 150" stroke="#f5efe0" stroke-width="1.5" fill="none" opacity=".7"/>
+            <!-- берег/пирс -->
+            <rect x="110" y="400" width="340" height="40" fill="#5a3a24"/>
+            <g stroke="#3d2616" stroke-width="3"><path d="M180 400v40M250 400v40M320 400v40M390 400v40"/></g>
+
+            <!-- рыбак -->
+            <g>
+              <!-- ноги -->
+              <path d="M235 330h40l-4 72h-30z" fill="#2c3a2a"/>
+              <path d="M285 330h40l-6 72h-30z" fill="#2c3a2a"/>
+              <path d="M232 396h44v10h-48z M282 396h44v10h-48z" fill="#141a14"/>
+              <!-- куртка-->
+              <path d="M222 205c10-14 30-20 58-20s48 6 58 20l8 135H214z" fill="#3f5a3b"/>
+              <!-- жилет -->
+              <path d="M240 200h80l6 140h-92z" fill="#c26a2a"/>
+              <path d="M280 200v140" stroke="#8d4a1c" stroke-width="3"/>
+              <rect x="246" y="250" width="24" height="18" rx="3" fill="#a5561f"/>
+              <rect x="290" y="250" width="24" height="18" rx="3" fill="#a5561f"/>
+              <!-- шея и голова -->
+              <rect x="268" y="170" width="24" height="24" fill="#e2a47a"/>
+              <ellipse cx="280" cy="140" rx="34" ry="38" fill="#eab088"/>
+              <!-- борода -->
+              <path d="M247 145c2 30 16 46 33 46s31-16 33-46c-8 10-20 12-33 12s-25-2-33-12z" fill="#7b4a2a"/>
+              <path d="M264 160c6 4 26 4 32 0" stroke="#5d3720" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <!-- улыбка -->
+              <path d="M268 166c6 6 18 6 24 0" stroke="#3b1f10" stroke-width="3" fill="#fff" stroke-linecap="round"/>
+              <!-- глаза -->
+              <circle cx="266" cy="135" r="3.6" fill="#1b1b1b"/><circle cx="294" cy="135" r="3.6" fill="#1b1b1b"/>
+              <path d="M258 125q8-5 15 0M287 125q8-5 15 0" stroke="#5d3720" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M280 138v12" stroke="#c98a62" stroke-width="3" stroke-linecap="round"/>
+              <!-- шляпа -->
+              <ellipse cx="280" cy="112" rx="58" ry="12" fill="#5b6b3c"/>
+              <path d="M246 112c0-30 14-42 34-42s34 12 34 42z" fill="#6d7f47"/>
+              <rect x="246" y="100" width="68" height="8" fill="#43502b"/>
+            </g>
+
+            <!-- судак -->
+            <g transform="translate(70 214) rotate(-6 210 50)">
+              <!-- спинной колючий плавник -->
+              <path d="M120 22l10-34 10 30 10-32 10 30 10-30 10 30 10-28 8 34z" fill="#4f5d3d" stroke="#3a4530" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M235 20l12-22 10 22 10-20 10 22 10-18 6 20z" fill="#5c6a45"/>
+              <!-- хвост -->
+              <path d="M380 50 430 6l-8 44 8 44z" fill="#5f6e48" stroke="#3a4530" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M392 50l30-30M392 50l32 0M392 50l30 30" stroke="#3a4530" stroke-width="1.5" opacity=".6"/>
+              <!-- тело -->
+              <path d="M10 52C30 22 90 10 180 14s170 14 210 36c-40 22-120 34-210 38S28 82 10 52z" fill="url(#zander)" stroke="#3a4530" stroke-width="2.5"/>
+              <!-- поперечные полосы -->
+              <g fill="#3d4a2e" opacity=".55">
+                <path d="M110 16c8 18 6 40-2 56l14 2c6-18 6-40-2-58z"/>
+                <path d="M165 14c8 20 6 44-2 60l16 1c6-20 6-44-2-61z"/>
+                <path d="M222 16c8 20 6 42-2 58l15-1c6-18 6-40-2-56z"/>
+                <path d="M280 22c7 16 6 34-1 48l14-3c5-14 5-30-1-44z"/>
+                <path d="M332 32c5 10 4 22-1 32l11-3c3-9 3-19 0-27z"/>
+              </g>
+              <!-- боковая линия -->
+              <path d="M70 44c80-8 200-4 312 6" stroke="#2f3a24" stroke-width="1.5" fill="none" opacity=".6"/>
+              <!-- голова: жаберная крышка, глаз, пасть с клыками -->
+              <path d="M78 22c14 16 16 44 2 64" stroke="#3a4530" stroke-width="2.5" fill="none"/>
+              <circle cx="44" cy="40" r="10" fill="#f3e7b5" stroke="#3a4530" stroke-width="2"/>
+              <circle cx="45" cy="40" r="5.5" fill="#1a1a1a"/>
+              <circle cx="43" cy="38" r="1.8" fill="#fff"/>
+              <path d="M10 52c10 4 26 6 40 4" stroke="#2f3a24" stroke-width="2.5" fill="none"/>
+              <path d="M18 54l3 7 3-6M32 56l3 7 3-7" fill="#fff" stroke="#2f3a24" stroke-width="1"/>
+              <!-- грудной и брюшной плавники -->
+              <path d="M110 64c10 12 26 18 40 16-8-10-22-16-40-16z" fill="#c9b07a" stroke="#3a4530" stroke-width="1.5"/>
+              <path d="M290 80l20 18 10-22z" fill="#9aa47a" stroke="#3a4530" stroke-width="1.5"/>
+            </g>
+
+            <!-- руки, держащие рыбу -->
+            <g>
+              <path d="M226 215c-30 6-60 22-80 48l18 14c22-20 46-32 70-38z" fill="#3f5a3b"/>
+              <path d="M334 215c30 6 64 22 84 44l-18 16c-22-18-48-30-72-36z" fill="#3f5a3b"/>
+              <ellipse cx="156" cy="272" rx="17" ry="14" fill="#eab088" stroke="#c98a62" stroke-width="2"/>
+              <ellipse cx="410" cy="268" rx="17" ry="14" fill="#eab088" stroke="#c98a62" stroke-width="2"/>
+              <path d="M146 266h20M146 273h20M400 262h20M400 269h20" stroke="#c98a62" stroke-width="2" stroke-linecap="round"/>
+            </g>
+
+            <!-- брызги -->
+            <g fill="#fff" opacity=".7">
+              <circle cx="60" cy="230" r="3"/><circle cx="48" cy="246" r="2"/><circle cx="510" cy="220" r="3"/><circle cx="522" cy="236" r="2"/>
+            </g>
+          </svg>
+        </div>
+        <figcaption>Ничто не заменит хорошую рыбалку для мужика</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Каталог (F-4…F-13) -->
+  <section class="block" id="catalog" style="background:var(--bg-2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <div>
+          <h2>Каталог</h2>
+          <p>Выберите раздел и происхождение — фильтры работают вместе. Названия, описания и цены примерные, до получения данных от магазина.</p>
+        </div>
+      </div>
+
+      <div class="cats" id="cats" role="group" aria-label="Разделы каталога"></div>
+
+      <div class="filters">
+        <div class="group" role="group" aria-label="Фильтр по категории">
+          <span class="label">Категория:</span>
+          <div id="catChips" style="display:contents"></div>
+        </div>
+        <div class="group" role="group" aria-label="Фильтр по происхождению">
+          <span class="label">Происхождение:</span>
+          <button class="chip" type="button" data-origin="all" aria-pressed="true">Все</button>
+          <button class="chip" type="button" data-origin="imp" aria-pressed="false">Импортные</button>
+          <button class="chip" type="button" data-origin="dom" aria-pressed="false">Отечественные</button>
+        </div>
+        <span class="count" id="count" aria-live="polite"></span>
+      </div>
+
+      <div class="grid" id="grid"></div>
+      <div class="empty" id="empty">
+        <p><strong>По выбранным фильтрам ничего не найдено.</strong></p>
+        <p>Попробуйте другое происхождение или раздел.</p>
+        <button class="btn btn-ghost" type="button" id="reset">Сбросить фильтры</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Преимущества (F-14) -->
+  <section class="block" id="benefits">
+    <div class="wrap">
+      <div class="sec-head"><h2>Почему у нас</h2></div>
+      <div class="benefits">
+        <article class="benefit">
+          <div class="ico"><svg aria-hidden="true"><use href="#i-map"/></svg></div>
+          <h3>Подбор под водоём</h3>
+          <p>Подскажем снасти, прикормку и лодку под вашу реку, озеро или водохранилище и под рыбу, которую собираетесь ловить.</p>
+        </article>
+        <article class="benefit">
+          <div class="ico"><svg aria-hidden="true"><use href="#i-truck"/></svg></div>
+          <h3>Доставка и самовывоз</h3>
+          <p>Доставка по Астане и в другие города Казахстана. Самовывоз из магазина в рабочие часы.</p>
+        </article>
+        <article class="benefit">
+          <div class="ico"><svg aria-hidden="true"><use href="#i-swap"/></svg></div>
+          <h3>Обмен и возврат</h3>
+          <p>Если товар не подошёл — обменяем или вернём деньги в течение 14 дней с момента покупки.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Контакты (F-15, F-16) -->
+  <section class="block" id="contacts" style="background:var(--bg-2)">
+    <div class="wrap">
+      <div class="sec-head"><h2>Контакты</h2></div>
+      <div class="contacts">
+        <div class="panel">
+          <h3>Магазин</h3>
+          <dl class="info">
+            <div><dt>Адрес</dt><dd>г. Астана, ул. Кунаева, 8</dd></div>
+            <div><dt>Часы работы</dt><dd>Пн–Сб: 9:00–18:00<br>Вс: выходной</dd></div>
+            <div><dt>Телефон</dt><dd><a href="tel:+77172200300">8 (7172) 200 300</a></dd></div>
+            <div><dt>Почта</dt><dd><a href="mailto:rybka@gmail.com">rybka@gmail.com</a></dd></div>
+          </dl>
+        </div>
+        <div class="panel" id="callback">
+          <h3>Перезвоните мне</h3>
+          <form class="callback" id="cbForm" novalidate>
+            <label>Имя
+              <input name="name" autocomplete="name" required placeholder="Как к вам обращаться">
+            </label>
+            <label>Телефон
+              <input name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+7 (___) ___-__-__">
+            </label>
+            <button class="btn btn-primary" type="submit">Жду звонка</button>
+            <p class="form-note">Прототип: заявка никуда не отправляется.</p>
+            <div class="form-ok" id="cbOk" role="status">Спасибо! Мы перезвоним вам в рабочее время.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span class="ph">[ГОД]</span> «Рыбка», Астана. Рыболовный магазин.</span>
+    <span>Ничто не заменит хорошую рыбалку.</span>
+  </div>
+</footer>
+
+<!-- Чат-бот (F-17…F-24) -->
+<button class="chat-toggle" id="chatToggle" type="button" aria-expanded="false" aria-controls="chat">
+  <svg aria-hidden="true"><use href="#i-chat"/></svg><span>Чат</span>
+</button>
+<section class="chat" id="chat" aria-label="Чат-помощник">
+  <div class="chat-head">
+    <div class="av"><svg aria-hidden="true"><use href="#i-fish"/></svg></div>
+    <div><strong>Помощник рыболова</strong><small>● на связи</small></div>
+    <button class="x" type="button" id="chatClose" aria-label="Закрыть чат">×</button>
+  </div>
+  <div class="chat-log" id="chatLog" aria-live="polite"></div>
+  <form class="chat-input" id="chatForm">
+    <label class="sr" for="chatText">Ваш вопрос</label>
+    <input id="chatText" autocomplete="off" placeholder="Напишите вопрос…">
+    <button type="submit" aria-label="Отправить"><svg aria-hidden="true"><use href="#i-send"/></svg></button>
+  </form>
+</section>
+
+<script>
+(() => {
+  const CATS = [
+    { id: 'rods',    name: 'Удочки',            icon: 'i-rod',    note: 'импорт и Россия' },
+    { id: 'boats',   name: 'Надувные лодки',    icon: 'i-boat',   note: 'НДНД, пайол, килевые' },
+    { id: 'motors',  name: 'Моторы и приводы',  icon: 'i-motor',  note: 'бензин и электро' },
+    { id: 'clothes', name: 'Одежда',            icon: 'i-jacket', note: 'на все сезоны' },
+    { id: 'tackle',  name: 'Снасти',            icon: 'i-hook',   note: 'катушки, леска, приманки' },
+    { id: 'bait',    name: 'Прикормки и корма', icon: 'i-bait',   note: 'смеси, насадки' },
+  ];
+  // Ориентировочные рыночные цены, ₸
+  const PRICES = [30000, 40000, 9000, 4500, 320000, 230000, 750000, 110000, 1800000, 250000, 900000, 95000, 90000, 18000, 160000, 16000, 20000, 15000, 3500, 12000, 2500, 3500, 3000, 4000];
+  const fmt = n => n.toLocaleString('ru-RU') + ' ₸';
+  const PRODUCTS = [
+    { c: 'rods', o: 'imp', t: 'Спиннинг Shimano Catana EX 2,4 м', d: 'Углеволокно, тест 5–25 г. Для джига и воблеров с берега.' },
+    { c: 'rods', o: 'imp', t: 'Фидерное удилище Daiwa Ninja Feeder 3,6 м', d: 'Три сменные вершинки, для рек со средним течением.' },
+    { c: 'rods', o: 'dom', t: 'Поплавочная удочка «Волжанка» 5 м', d: 'Телескоп, лёгкая, для ловли с берега и лодки.' },
+    { c: 'rods', o: 'dom', t: 'Зимняя удочка «Пирс»', d: 'Компактная, с катушкой и кивком для мормышки.' },
+    { c: 'boats', o: 'dom', t: 'Лодка ПВХ «Ривьера 3200 НДНД»', d: 'Надувное дно низкого давления, 2–3 места, под мотор до 9,9 л. с.' },
+    { c: 'boats', o: 'dom', t: 'Лодка ПВХ «Солар-350» с пайолом', d: 'Жёсткий пайол, устойчива на волне.' },
+    { c: 'boats', o: 'imp', t: 'Килевая лодка Zodiac Cadet 340 Aero', d: 'Надувной киль, хорошо держит курс на скорости.' },
+    { c: 'boats', o: 'dom', t: 'Гребная лодка «Мнев Бриз 260»', d: 'Лёгкая, для вёсел, для небольших водоёмов.' },
+    { c: 'motors', o: 'imp', t: 'Подвесной мотор Yamaha F9.9 JMHS', d: 'Мощность 9,9 л. с., четырёхтактный.' },
+    { c: 'motors', o: 'imp', t: 'Электромотор Minn Kota Endura C2 55', d: 'Тяга 55 фунтов, тихий ход для заливов.' },
+    { c: 'motors', o: 'imp', t: 'Лодочный мотор Tohatsu M9.8B', d: 'Мощность 9,8 л. с., двухтактный, неприхотлив в обслуживании.' },
+    { c: 'clothes', o: 'dom', t: 'Зимний костюм-поплавок Triton Gear', d: 'Для подлёдной рыбалки, держит на воде, до −35 °C.' },
+    { c: 'clothes', o: 'imp', t: 'Демисезонный костюм Norfin Nature Pro', d: 'Весна и осень: мембрана, не продувается.' },
+    { c: 'clothes', o: 'dom', t: 'Летний костюм «Антигнус»', d: 'Защита от комаров и клещей, сетка на капюшоне.' },
+    { c: 'clothes', o: 'imp', t: 'Вейдерсы Simms Freestone', d: 'Забродные полукомбинезоны из дышащей мембраны.' },
+    { c: 'clothes', o: 'dom', t: 'Сапоги ЭВА Torvi утеплённые', d: 'Лёгкие, тёплые, со съёмным вкладышем.' },
+    { c: 'tackle', o: 'imp', t: 'Катушка Shimano Sienna 2500 FG', d: 'Размер 2500, передний фрикцион.' },
+    { c: 'tackle', o: 'imp', t: 'Плетёный шнур Sufix 832 Braid 150 м', d: 'Восемь жил, низкая растяжимость.' },
+    { c: 'tackle', o: 'dom', t: 'Набор джиг-головок Narval', d: 'Разные веса, острые крючки, под силикон.' },
+    { c: 'tackle', o: 'dom', t: 'Воблеры Pontoon 21 на судака и щуку', d: 'Набор из пяти штук, разная глубина.' },
+    { c: 'bait', o: 'dom', t: 'Прикормка Dunaev Классика «Лещ» 0,9 кг', d: 'Для течения, с ароматом специй.' },
+    { c: 'bait', o: 'imp', t: 'Прикормка Sensas 3000 Feeder 1 кг', d: 'Мелкий помол, создаёт облако мути.' },
+    { c: 'bait', o: 'dom', t: 'Пеллетс Dunaev 4 мм', d: 'Для карпа и карася, медленно растворяется.' },
+    { c: 'bait', o: 'imp', t: 'Ароматизатор Sensas Aromix', d: 'Жидкий, добавляется в прикормку.' },
+  ];
+  PRODUCTS.forEach((p, i) => p.price = PRICES[i]);
+  const catById = Object.fromEntries(CATS.map(c => [c.id, c]));
+  const state = { cat: 'all', origin: 'all', cart: 0 };
+
+  const $ = s => document.querySelector(s);
+  const grid = $('#grid'), empty = $('#empty'), count = $('#count');
+
+  // Плитки и чипы категорий
+  $('#cats').innerHTML = CATS.map(c =>
+    `<button class="cat-tile" type="button" data-cat="${c.id}" aria-pressed="false">
+      <svg aria-hidden="true"><use href="#${c.icon}"/></svg>${c.name}<small>${c.note}</small>
+    </button>`).join('');
+  $('#catChips').innerHTML = `<button class="chip" type="button" data-cat="all" aria-pressed="true">Все</button>` +
+    CATS.map(c => `<button class="chip" type="button" data-cat="${c.id}" aria-pressed="false">${c.name}</button>`).join('');
+
+  function plural(n) {
+    const m10 = n % 10, m100 = n % 100;
+    if (m10 === 1 && m100 !== 11) return 'товар';
+    if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return 'товара';
+    return 'товаров';
+  }
+
+  function render() {
+    document.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === state.cat));
+    document.querySelectorAll('[data-origin]').forEach(b => b.setAttribute('aria-pressed', b.dataset.origin === state.origin));
+    const list = PRODUCTS.filter(p =>
+      (state.cat === 'all' || p.c === state.cat) && (state.origin === 'all' || p.o === state.origin));
+    grid.innerHTML = list.map(p => {
+      const c = catById[p.c];
+      return `<article class="card">
+        <div class="thumb"><svg aria-hidden="true"><use href="#${c.icon}"/></svg></div>
+        <div class="body">
+          <div class="tags"><span class="tag">${c.name}</span><span class="tag ${p.o}">${p.o === 'imp' ? 'Импорт' : 'Россия'}</span></div>
+          <h3>${p.t}</h3>
+          <p>${p.d}</p>
+          <div class="foot"><span class="price">${fmt(p.price)}</span><button class="btn btn-primary add" type="button">В корзину</button></div>
+        </div>
+      </article>`;
+    }).join('');
+    empty.classList.toggle('show', list.length === 0);
+    count.textContent = list.length ? `Найдено: ${list.length} ${plural(list.length)}` : '';
+  }
+
+  document.addEventListener('click', e => {
+    const cat = e.target.closest('[data-cat]');
+    if (cat) { state.cat = cat.dataset.cat; render(); return; }
+    const org = e.target.closest('[data-origin]');
+    if (org) { state.origin = org.dataset.origin; render(); return; }
+    const add = e.target.closest('.add');
+    if (add) {
+      state.cart++;
+      $('#cartCount').textContent = state.cart;
+      const cart = $('#cart'); cart.classList.remove('bump'); void cart.offsetWidth; cart.classList.add('bump');
+      add.textContent = 'Добавлено ✓'; add.classList.add('done');
+      setTimeout(() => { add.textContent = 'В корзину'; add.classList.remove('done'); }, 1200);
+    }
+    if (e.target.closest('[data-open-chat]')) openChat(true);
+  });
+  $('#reset').addEventListener('click', () => { state.cat = 'all'; state.origin = 'all'; render(); });
+
+  // Форма обратного звонка
+  $('#cbForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = e.target;
+    const bad = [...f.querySelectorAll('input')].find(i => !i.value.trim());
+    if (bad) { bad.focus(); bad.style.borderColor = 'var(--accent)'; return; }
+    $('#cbOk').classList.add('show');
+    f.reset();
+  });
+
+  render();
+
+  // ---------- Чат-бот ----------
+  const chat = $('#chat'), log = $('#chatLog'), toggle = $('#chatToggle');
+  let started = false;
+
+  function openChat(force) {
+    const open = force ?? !chat.classList.contains('open');
+    chat.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', open);
+    if (open) {
+      if (!started) { started = true; node('start'); }
+      setTimeout(() => $('#chatText').focus(), 50);
+    }
+  }
+  toggle.addEventListener('click', () => openChat());
+  $('#chatClose').addEventListener('click', () => { openChat(false); toggle.focus(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && chat.classList.contains('open')) { openChat(false); toggle.focus(); } });
+
+  function say(text, who = 'bot') {
+    const m = document.createElement('div');
+    m.className = 'msg ' + who; m.innerHTML = text;
+    log.appendChild(m); log.scrollTop = log.scrollHeight;
+  }
+  function options(list, withHome = true) {
+    log.querySelectorAll('.quick').forEach(q => q.remove());
+    const box = document.createElement('div'); box.className = 'quick';
+    list.forEach(([label, action]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = label;
+      b.addEventListener('click', () => { say(label, 'me'); action(); });
+      box.appendChild(b);
+    });
+    if (withHome) {
+      const h = document.createElement('button'); h.type = 'button'; h.className = 'home'; h.textContent = '↩ Главное меню';
+      h.addEventListener('click', () => { say('Главное меню', 'me'); node('start'); });
+      box.appendChild(h);
+    }
+    log.appendChild(box); log.scrollTop = log.scrollHeight;
+  }
+  function go(cat, origin = 'all', label) {
+    state.cat = cat; state.origin = origin; render();
+    say(`Открываю раздел «${label || catById[cat].name}» в каталоге.`);
+    setTimeout(() => { openChat(false); document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' }); }, 600);
+  }
+
+  const N = {
+    start() {
+      say('Здравствуйте! Я помогу быстро найти нужный раздел. Что вас интересует?');
+      options([
+        ['Лодки', () => N.boats()], ['Удочки', () => N.rods()], ['Снасти', () => N.tackle()],
+        ['Корма', () => N.bait()], ['Спец. одежда', () => N.clothes()], ['Другое', () => N.other()],
+      ], false);
+    },
+    boats() {
+      say('Что именно ищете: саму лодку или мотор к ней?');
+      options([['Надувные лодки', () => go('boats')], ['Моторы и приводы', () => go('motors')]]);
+    },
+    rods() {
+      say('Какие удочки показать?');
+      options([['Импортные', () => go('rods', 'imp', 'Удочки · импортные')], ['Отечественные', () => go('rods', 'dom', 'Удочки · отечественные')], ['Все', () => go('rods')]]);
+    },
+    tackle() {
+      say('Катушки, лески, шнуры, джиг-головки и воблеры. Показать?');
+      options([['Импортные', () => go('tackle', 'imp', 'Снасти · импортные')], ['Отечественные', () => go('tackle', 'dom', 'Снасти · отечественные')], ['Все снасти', () => go('tackle')]]);
+    },
+    bait() {
+      say('Прикормки, пеллетс и ароматизаторы. Открыть раздел?');
+      options([['Показать прикормки и корма', () => go('bait')]]);
+    },
+    clothes() {
+      say('На какой сезон нужна одежда?');
+      const all = () => go('clothes');
+      options([['Зима', all], ['Весна и осень', all], ['Лето', all], ['Сапоги и вейдерсы', all]]);
+    },
+    other() {
+      say('С другими вопросами лучше обратиться к продавцу — он подскажет по наличию, ценам и подбору.<br>Телефон: <a href="tel:+77172200300"><b>8 (7172) 200 300</b></a><br>Пн–Сб 9:00–18:00, вс — выходной.');
+      options([['Оставить номер для звонка', () => {
+        say('Перехожу к форме «Перезвоните мне».');
+        setTimeout(() => { openChat(false); document.getElementById('callback').scrollIntoView({ behavior: 'smooth' }); document.querySelector('#cbForm input').focus({ preventScroll: true }); }, 600);
+      }]]);
+    },
+  };
+  function node(name) { N[name](); }
+
+  const KEYWORDS = [
+    [/мотор|двигат|привод|электромот|тяг|л\.?\s?с/i, () => { say('Похоже, вас интересуют моторы.'); go('motors'); }],
+    [/лодк|пвх|пайол|кил|вёсл|весл/i, () => N.boats()],
+    [/удочк|удилищ|спиннинг|фидер|телескоп/i, () => N.rods()],
+    [/снаст|катушк|леск|шнур|крюч|блесн|воблер|джиг|приманк|поплав/i, () => N.tackle()],
+    [/корм|прикорм|пеллет|насадк|опарыш|мотыл|аромат/i, () => N.bait()],
+    [/одежд|костюм|куртк|сапог|вейдерс|зим|лет|осен|весн|комар/i, () => N.clothes()],
+    [/цен|стоит|скольк|налич|есть ли|доставк|возврат|адрес|телефон/i, () => {
+      say('О наличии и ценах точно скажет продавец — я пока работаю по готовым сценариям.'); N.other();
+    }],
+  ];
+  $('#chatForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const inp = $('#chatText'), text = inp.value.trim();
+    if (!text) return;
+    say(text.replace(/[<>&]/g, ch => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[ch])), 'me');
+    inp.value = '';
+    const hit = KEYWORDS.find(([re]) => re.test(text));
+    setTimeout(() => {
+      if (hit) hit[1]();
+      else { say('Не совсем понял вопрос. Выберите тему или нажмите «Другое» — свяжем с продавцом.'); options([['Другое', () => N.other()]]); }
+    }, 250);
+  });
+})();
+</script>
+</body>
+</html>
